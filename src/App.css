@@ -135,9 +135,9 @@
 
 .incidents-panel,
 .corridors-panel {
-  background: rgba(30, 41, 59, 0.8);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: var(--spacing-md);
   flex: 1;
@@ -145,7 +145,7 @@
   max-height: 400px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px var(--shadow-color);
   transition: all 0.3s ease;
   animation: slideInLeft 0.6s ease-out;
 }
@@ -153,7 +153,7 @@
 .incidents-panel:hover,
 .corridors-panel:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 40px var(--shadow-color);
   border-color: rgba(59, 130, 246, 0.3);
 }
 
@@ -389,19 +389,19 @@
 }
 
 .timeline-wrapper {
-  background: rgba(30, 41, 59, 0.8);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: var(--spacing-lg);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px var(--shadow-color);
   animation: slideInUp 0.8s ease-out;
   transition: all 0.3s ease;
 }
 
 .timeline-wrapper:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 40px var(--shadow-color);
   border-color: rgba(59, 130, 246, 0.3);
 }
 
@@ -433,9 +433,16 @@
   gap: var(--spacing-md);
   margin-top: var(--spacing-md);
   padding: var(--spacing-sm);
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--bg-tertiary);
   border-radius: 8px;
   backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.time-controls:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .current-time {

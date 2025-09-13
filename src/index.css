@@ -1,4 +1,4 @@
-/* Traffic Management Dashboard - Dark Theme */
+/* Traffic Management Dashboard - Theme System */
 :root {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   line-height: 1.5;
@@ -10,8 +10,11 @@
   --warning: #F59E0B;
   --critical: #EF4444;
   --accent: #9333EA;
-  
-  /* Dark Theme Colors */
+}
+
+/* Dark Theme (Default) */
+:root,
+[data-theme="dark"] {
   --bg-primary: #0F1419;
   --bg-secondary: #1A1F2E;
   --bg-tertiary: #252A3A;
@@ -20,7 +23,26 @@
   --text-muted: #6B7280;
   --border: #374151;
   --border-light: #4B5563;
-  
+  --glass-bg: rgba(30, 41, 59, 0.8);
+  --glass-border: rgba(148, 163, 184, 0.2);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-tertiary: #F1F5F9;
+  --text-secondary: #ffffff;
+  --text-muted: #94A3B8;
+  --border: #E2E8F0;
+  --border-light: #CBD5E1;
+  --glass-bg: rgba(248, 250, 252, 0.9);
+  --glass-border: rgba(148, 163, 184, 0.3);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+:root {
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -46,6 +68,7 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
