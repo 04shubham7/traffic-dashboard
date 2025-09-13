@@ -1,0 +1,570 @@
+.traffic-map {
+  height: 100%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  overflow: visible;
+  border: 1px solid var(--border);
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.map-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+}
+
+.layer-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.control-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-right: var(--spacing-sm);
+}
+
+.layer-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.layer-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.layer-btn:hover::before {
+  left: 100%;
+}
+
+.layer-btn:hover {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: var(--border-light);
+}
+
+.layer-btn.active {
+  background: linear-gradient(135deg, var(--primary) 0%, #1E40AF 100%);
+  color: white;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.layer-btn.active:hover {
+  background: linear-gradient(135deg, #1E40AF 0%, var(--primary) 100%);
+  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.map-legend {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  background: #1a1a2e;
+  overflow: visible;
+  min-height: 400px;
+  width: 100%;
+  z-index: 2;
+  border-radius: 0 0 12px 12px;
+}
+
+.geoapify-map-container {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 0 12px 12px;
+  overflow: visible;
+  position: relative;
+  z-index: 3;
+  min-height: 400px;
+}
+
+#traffic-map-container {
+  background: #1a1a2e !important;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* Custom Leaflet marker styles */
+.custom-junction-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-incident-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.map-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  color: var(--text-secondary);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: rgba(26, 26, 46, 0.9);
+  border-radius: 0 0 12px 12px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.map-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(66, 153, 225, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(72, 187, 120, 0.1) 0%, transparent 50%);
+}
+
+.city-blocks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.city-block {
+  position: absolute;
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: 1px solid #718096;
+  border-radius: 4px;
+  opacity: 0.8;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.road {
+  position: absolute;
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.road.horizontal {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.road.vertical {
+  width: 8px;
+  border-radius: 4px;
+}
+
+.road.major-road {
+  background: linear-gradient(90deg, #4a5568 0%, #2d3748 50%, #4a5568 100%);
+  border-color: #718096;
+}
+
+.road.major-road.horizontal {
+  height: 12px;
+  background: linear-gradient(180deg, #4a5568 0%, #2d3748 30%, #2d3748 70%, #4a5568 100%);
+}
+
+.road.major-road.vertical {
+  width: 12px;
+  background: linear-gradient(90deg, #4a5568 0%, #2d3748 30%, #2d3748 70%, #4a5568 100%);
+}
+
+.road.secondary-road {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+.road.secondary-road.horizontal {
+  height: 6px;
+}
+
+.road.secondary-road.vertical {
+  width: 6px;
+}
+
+.road-label {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  pointer-events: none;
+  background: rgba(45, 55, 72, 0.8);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #4a5568;
+}
+
+.road-label:not(.vertical) {
+  top: -25px;
+  left: 10px;
+}
+
+.road-label.vertical {
+  left: -60px;
+  top: 10px;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.landmarks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.landmark {
+  position: absolute;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.landmark:hover {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.landmark.park {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  border-color: #2f855a;
+  color: white;
+}
+
+.landmark.mall {
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  border-color: #2c5282;
+  color: white;
+}
+
+.landmark.hospital {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  border-color: #c53030;
+  color: white;
+}
+
+.landmark.metro {
+  background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+  border-color: #6b46c1;
+  color: white;
+}
+
+.landmark span {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.heatmap-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.heat-zone {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: pulse 3s infinite;
+}
+
+.heat-zone.high {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.6) 0%, transparent 70%);
+}
+
+.heat-zone.medium {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, transparent 70%);
+}
+
+.heat-zone.low {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%);
+}
+
+.queue-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.queue-zone {
+  position: absolute;
+  border-radius: 4px;
+  opacity: 0.7;
+  animation: pulse 2s infinite;
+}
+
+.queue-zone.long {
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.8) 0%, rgba(239, 68, 68, 0.4) 100%);
+}
+
+.queue-zone.medium {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.8) 0%, rgba(245, 158, 11, 0.4) 100%);
+}
+
+.queue-zone.short {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.8) 0%, rgba(16, 185, 129, 0.4) 100%);
+}
+
+.speed-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.speed-zone {
+  position: absolute;
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+.speed-zone.fast {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.8) 0%, rgba(16, 185, 129, 0.3) 100%);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.speed-zone.medium {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.8) 0%, rgba(245, 158, 11, 0.3) 100%);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+.speed-zone.slow {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.8) 0%, rgba(239, 68, 68, 0.3) 100%);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+}
+
+.incidents-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.incident-zone {
+  position: absolute;
+  font-size: 20px;
+  animation: bounce 2s infinite;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
+}
+
+.incident-zone.critical {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.junction-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.junction-marker {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 4px solid var(--success);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 15;
+  transform: translate(-50%, -50%);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.junction-marker:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  border-width: 5px;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(16, 185, 129, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.junction-marker.selected {
+  border-color: var(--primary);
+  background: radial-gradient(circle, var(--primary-light) 0%, var(--primary) 100%);
+  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(29, 78, 216, 0.8),
+    inset 0 2px 6px rgba(255, 255, 255, 0.3);
+  animation: pulse-selected 2s infinite;
+}
+
+@keyframes pulse-selected {
+  0%, 100% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 30px rgba(29, 78, 216, 0.8), inset 0 2px 6px rgba(255, 255, 255, 0.3); }
+  50% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 40px rgba(29, 78, 216, 1), inset 0 2px 6px rgba(255, 255, 255, 0.3); }
+}
+
+.signal-icon {
+  font-size: 16px;
+  margin-bottom: var(--spacing-xs);
+  animation: pulse 2s infinite;
+}
+
+.junction-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.junction-stats {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.countdown-timer {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--warning);
+  text-align: center;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: 'Courier New', monospace;
+}
+
+.queue-indicator {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  height: 3px;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  margin-left: 4px;
+}
+
+.live-indicators {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.indicator {
+  position: absolute;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.indicator.emergency {
+  border-color: var(--critical);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.indicator.construction {
+  border-color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+}
